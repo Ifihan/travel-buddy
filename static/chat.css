@@ -40,6 +40,13 @@ body {
 
 .logo-icon {
   font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  stroke: currentColor;
 }
 
 h1 {
@@ -68,10 +75,6 @@ header {
   justify-content: center;
   gap: 8px;
   margin-bottom: 8px;
-}
-
-.logo-icon {
-  font-size: 24px;
 }
 
 h1 {
@@ -129,6 +132,8 @@ main {
   padding: 12px 16px;
   border-radius: var(--radius);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  white-space: pre-line;
+  line-height: 1.6;
 }
 
 .message.bot .message-content {
@@ -159,15 +164,17 @@ main {
 
 .chat-input-container {
   display: flex;
+  align-items: center;
   background-color: white;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  padding: 0 8px;
 }
 
 #user-input {
   flex: 1;
   padding: 12px 16px;
-  border: 1px solid var(--border-color);
+  border: none;
   border-radius: var(--radius);
   font-size: 14px;
   outline: none;
@@ -185,21 +192,20 @@ main {
   border-radius: var(--radius);
   width: 40px;
   height: 40px;
-  margin-left: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
 #send-button:hover {
   background-color: #4338ca;
+  transform: translateY(-1px);
 }
 
-.send-icon {
-  width: 18px;
-  height: 18px;
+#send-button:active {
+  transform: translateY(1px);
 }
 
 /* Scroll to bottom button */
@@ -255,11 +261,16 @@ main {
   padding: 8px 16px;
   font-size: 13px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
 .suggestion-chip:hover {
   background-color: #dfe7ff;
+  transform: translateY(-1px);
+}
+
+.suggestion-chip:active {
+  transform: translateY(1px);
 }
 
 footer {
@@ -309,6 +320,49 @@ footer {
   }
 }
 
+/* Icon buttons styling */
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  border-radius: var(--radius);
+  transition: color 0.2s, background-color 0.2s, transform 0.2s;
+}
+
+.icon-button:hover {
+  color: var(--primary-color);
+  background-color: var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.icon-button:active {
+  transform: translateY(1px);
+}
+
+/* Message content bullet points */
+.message-content ul {
+  margin: 8px 0;
+  padding-left: 24px;
+  list-style: none;
+}
+
+.message-content li {
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.message-content li::before {
+  content: "•";
+  color: var(--primary-color);
+  position: absolute;
+  left: -15px;
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
   .container {
@@ -339,30 +393,5 @@ footer {
   #user-input {
     padding: 10px 12px;
   }
-
-  /* Add to .message-content */
-.message-content {
-white-space: pre-line;
-line-height: 1.6;
-}
-
-/* Add bullet point styling */
-.message-content ul {
-margin: 8px 0;
-padding-left: 24px;
-list-style: none;
-}
-
-.message-content li {
-position: relative;
-margin-bottom: 4px;
-}
-
-.message-content li::before {
-content: "•";
-color: var(--primary-color);
-position: absolute;
-left: -15px;
-}
 }
 
