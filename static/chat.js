@@ -76,31 +76,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     async function sendMessageToBackend(message) {
-      try {
-        showTypingIndicator()
+        try {
+            showTypingIndicator();
   
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ message: message }),
-        })
+            const response = await fetch("/api/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ message: message }),
+            });
   
-        if (!response.ok) {
-          throw new Error("Network response was not ok")
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+  
+            const data = await response.json();
+            removeTypingIndicator();
+  
+            addMessage(data.response, false);
+        } catch (error) {
+            console.error("Error:", error);
+            removeTypingIndicator();
+  
+            addMessage("Sorry, I'm having trouble connecting right now. Please try again later.", false);
         }
-  
-        const data = await response.json()
-        removeTypingIndicator()
-  
-        addMessage(data.response, false)
-      } catch (error) {
-        console.error("Error:", error)
-        removeTypingIndicator()
-  
-        addMessage("Sorry, I'm having trouble connecting right now. Please try again later.", false)
-      }
     }
   
     function handleSendMessage() {
@@ -173,6 +173,4 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // Focus the input field when the page loads
     userInput.focus()
-  })
-  
-  
+})

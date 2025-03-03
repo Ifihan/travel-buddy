@@ -22,12 +22,12 @@ body {
   background-color: var(--background);
   line-height: 1.5;
   height: 100vh;
-  overflow: hidden; /* Prevent body scrolling */
+  overflow: hidden;
 }
 
 .logo a {
-  text-decoration: none; /* Remove default underline */
-  color: inherit; /* Inherit color from parent */
+  text-decoration: none;
+  color: inherit;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -35,7 +35,7 @@ body {
 }
 
 .logo a:hover {
-  color: var(--primary-color); /* Change color on hover */
+  color: var(--primary-color);
 }
 
 .logo-icon {
@@ -77,12 +77,6 @@ header {
   margin-bottom: 8px;
 }
 
-h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--primary-color);
-}
-
 .tagline {
   color: var(--text-light);
   font-size: 14px;
@@ -93,7 +87,7 @@ main {
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden; /* Prevent main scrolling */
+  overflow: hidden;
 }
 
 .chat-container {
@@ -104,7 +98,7 @@ main {
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
-  position: relative; /* For positioning the scroll button */
+  position: relative;
 }
 
 .chat-messages {
@@ -114,8 +108,8 @@ main {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  scroll-behavior: smooth; /* Smooth scrolling */
-  padding-bottom: 80px; /* Space for fixed input */
+  scroll-behavior: smooth;
+  padding-bottom: 80px;
 }
 
 .message {
@@ -162,6 +156,13 @@ main {
   z-index: 10;
 }
 
+/* New styles for the input container group */
+.input-container-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .chat-input-container {
   display: flex;
   align-items: center;
@@ -169,6 +170,13 @@ main {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 0 8px;
+  flex: 1;
+}
+
+/* Group the icons together */
+.input-icons {
+  display: flex;
+  align-items: center;
 }
 
 #user-input {
@@ -197,6 +205,7 @@ main {
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s, transform 0.2s;
+  flex-shrink: 0;
 }
 
 #send-button:hover {
@@ -212,7 +221,7 @@ main {
 .scroll-to-bottom-btn {
   position: absolute;
   right: 20px;
-  bottom: 80px; /* Position above the input area */
+  bottom: 80px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -394,4 +403,3 @@ footer {
     padding: 10px 12px;
   }
 }
-
