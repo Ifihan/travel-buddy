@@ -25,6 +25,29 @@ body {
   overflow: hidden; /* Prevent body scrolling */
 }
 
+.logo a {
+  text-decoration: none; /* Remove default underline */
+  color: inherit; /* Inherit color from parent */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease-in-out;
+}
+
+.logo a:hover {
+  color: var(--primary-color); /* Change color on hover */
+}
+
+.logo-icon {
+  font-size: 24px;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;
