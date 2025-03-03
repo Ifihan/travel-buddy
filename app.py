@@ -44,7 +44,7 @@ def chat():
             return jsonify({"error": "No message provided"}), 400
 
         response = client.models.generate_content(
-            model="gemini-2.0-flash-001",
+            model=os.getenv("GEN_AI_MODEL_NAME"),
             contents=user_message,
             config=types.GenerateContentConfig(response_mime_type="text/plain"),
         )
