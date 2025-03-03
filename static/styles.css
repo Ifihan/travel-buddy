@@ -316,6 +316,31 @@
     #user-input {
       padding: 10px 12px;
     }
+
+    /* Add to .message-content */
+.message-content {
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+/* Add bullet point styling */
+.message-content ul {
+  margin: 8px 0;
+  padding-left: 24px;
+  list-style: none;
+}
+
+.message-content li {
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.message-content li::before {
+  content: "•";
+  color: var(--primary-color);
+  position: absolute;
+  left: -15px;
+}
   }
   
   
