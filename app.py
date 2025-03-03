@@ -13,25 +13,25 @@ GOOGLE_CLOUD_LOCATION = os.environ.get("GOOGLE_CLOUD_LOCATION")
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-# Initialize Vertex AI Client
 client = genai.Client(
     vertexai=True, project=GOOGLE_CLOUD_PROJECT, location=GOOGLE_CLOUD_LOCATION
 )
 
-
-# Route for rendering the main page
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
+@app.route("/chat", methods=["GET", "POST"])
+def chatbot():
+    return render_template("chat.html")
+
+
 def clean_ai_response(text):
     """Clean and format AI response while preserving structure"""
-    # Replace markdown bullets with hyphens and preserve newlines
     text = re.sub(r"^(\s*)[*•]\s+", r"\1- ", text, flags=re.MULTILINE)
-    # Remove other markdown but keep line breaks
-    text = re.sub(r"^#+\s*", "", text, flags=re.MULTILINE)  # Remove headers
-    text = re.sub(r"[*_`]", "", text)  # Remove other markdown
+    text = re.sub(r"^#+\s*", "", text, flags=re.MULTILINE)
+    text = re.sub(r"[*_`]", "", text)
     return text.strip()
 
 @app.route("/api/chat", methods=["POST"])
@@ -46,7 +46,9 @@ def chat():
         response = client.models.generate_content(
             model=os.getenv("GEN_AI_MODEL_NAME"),
             contents=user_message,
-            config=types.GenerateContentConfig(response_mime_type="text/plain"),
+            config=types.GenerateContentConfig(
+                system_instruction="You are TravelBuddy, an AI that only answers travel-related questions. If the question is not about travel, politely decline to answer.",
+                response_mime_type="text/plain"),
         )
 
         ai_response = clean_ai_response(response.text) if response.text else "Sorry, I couldn't process that."

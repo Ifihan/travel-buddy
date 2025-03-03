@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelBuddy - Your Travel Companion</title>
+    <link rel="stylesheet" href="/static/chat.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+    <link type="image/png" sizes="16x16" rel="icon" href="/static/fav-icon.png">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                    <span class="logo-icon">✈️</span>
+                <h1>TravelBuddy</h1>
+            </div>
+            <p class="tagline">Your AI-powered travel companion</p>
+        </header>
+
+        <main>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot">
+                        <div class="message-content">
+                            <p>Hi there! I'm TravelBuddy, your AI travel assistant. Where would you like to travel to?</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="scroll-to-bottom" class="scroll-to-bottom-btn hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                
+                <div class="chat-input-wrapper">
+                    <div class="chat-input-container">
+                        <input type="text" id="user-input" placeholder="Ask about a destination..." autocomplete="off">
+                        <button id="send-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="send-icon">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="suggestions">
+            <p>Try asking:</p>
+            <div class="suggestion-chips">
+                <button class="suggestion-chip">Best time to visit Paris</button>
+                <button class="suggestion-chip">Things to do in Tokyo</button>
+                <button class="suggestion-chip">Budget travel tips</button>
+                <button class="suggestion-chip">Local cuisine in Italy</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>© <span id="current-year"></span> TravelBuddy | Powered by Vertex AI</p>
+        </footer>
+    </div>
+
+    <script src="/static/chat.js"></script>
+</body>
+</html>
+

@@ -3,67 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TravelBuddy - Your Travel Companion</title>
-    <link rel="stylesheet" href="/static/styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+    <title>TravelBuddy - Your AI-Powered Travel Companion</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link type="image/png" sizes="16x16" rel="icon" href="/static/fav-icon.png">
 </head>
 <body>
-    <div class="container">
-        <header>
+    <nav class="navbar">
+        <div class="nav-container">
             <div class="logo">
                 <span class="logo-icon">✈️</span>
-                <h1>TravelBuddy</h1>
+                <span class="logo-text">TravelBuddy</span>
             </div>
-            <p class="tagline">Your AI-powered travel companion</p>
-        </header>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#testimonials">Testimonials</a>
+                <a href="/chat" class="cta-button-small">Try Now</a>
+            </div>
+            <button class="mobile-menu-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </nav>
 
-        <main>
-            <div class="chat-container">
-                <div class="chat-messages" id="chat-messages">
-                    <div class="message bot">
-                        <div class="message-content">
-                            <p>Hi there! I'm TravelBuddy, your AI travel assistant. Where would you like to travel to?</p>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Your AI Travel Companion</h1>
+                <p class="hero-subtitle">Plan smarter trips with personalized recommendations powered by AI</p>
+                <div class="cta-group">
+                    <a href="/chat" class="cta-button">Start Planning Your Trip</a>
+                    <a href="#how-it-works" class="secondary-button">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="chat-preview">
+                    <div class="chat-message bot">
+                        <p>Hi! Where would you like to travel to?</p>
+                    </div>
+                    <div class="chat-message user">
+                        <p>I want to visit Japan in spring</p>
+                    </div>
+                    <div class="chat-message bot">
+                        <p>Great choice! Spring in Japan is beautiful with cherry blossoms. The best time is late March to early April. Would you like specific recommendations for your trip?</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <h2>Why Choose TravelBuddy</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI-Powered Planning</h3>
+                    <p>Get personalized travel recommendations using advanced AI technology</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Smart Itineraries</h3>
+                    <p>Create optimized travel schedules based on your preferences and time</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Local Insights</h3>
+                    <p>Access detailed information about destinations, customs, and hidden gems</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real-time Assistance</h3>
+                    <p>Get instant answers to your travel questions, anytime, anywhere</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it Works Section -->
+        <section id="how-it-works" class="how-it-works">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Tell us your plans</h3>
+                    <p>Share your travel preferences, dates, and interests with our AI assistant</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Get recommendations</h3>
+                    <p>Receive personalized suggestions for destinations, activities, and accommodations</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Plan your trip</h3>
+                    <p>Create your perfect itinerary with our AI-powered planning tools</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="testimonials">
+            <h2>What Travelers Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p>"TravelBuddy helped me plan the perfect trip to Japan. The AI suggestions were spot-on!"</p>
+                    <div class="testimonial-author">
+                        <img src="/static/female.png" alt="Sarah M." class="author-image">
+                        <div>
+                            <h4>Sarah M.</h4>
+                            <p>Adventure Traveler</p>
                         </div>
                     </div>
                 </div>
-                
-                <button id="scroll-to-bottom" class="scroll-to-bottom-btn hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </button>
-                
-                <div class="chat-input-wrapper">
-                    <div class="chat-input-container">
-                        <input type="text" id="user-input" placeholder="Ask about a destination..." autocomplete="off">
-                        <button id="send-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="send-icon">
-                                <line x1="22" y1="2" x2="11" y2="13"></line>
-                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                            </svg>
-                        </button>
+                <div class="testimonial-card">
+                    <p>"The local insights and real-time assistance made my Europe trip so much easier to plan."</p>
+                    <div class="testimonial-author">
+                        <img src="/static/male.png" alt="James L." class="author-image">
+                        <div>
+                            <h4>James L.</h4>
+                            <p>Digital Nomad</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </main>
+        </section>
 
-        <div class="suggestions">
-            <p>Try asking:</p>
-            <div class="suggestion-chips">
-                <button class="suggestion-chip">Best time to visit Paris</button>
-                <button class="suggestion-chip">Things to do in Tokyo</button>
-                <button class="suggestion-chip">Budget travel tips</button>
-                <button class="suggestion-chip">Local cuisine in Italy</button>
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to Start Your Journey?</h2>
+            <p>Join thousands of happy travelers who plan better trips with TravelBuddy</p>
+            <a href="/chat" class="cta-button">Start Planning Now</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="logo">
+                    <span class="logo-icon">✈️</span>
+                    <span class="logo-text">TravelBuddy</span>
+                </div>
+                <p>Your AI-powered travel companion</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#testimonials">Testimonials</a>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
             </div>
         </div>
+        <div class="footer-bottom">
+            <p>© <span id="current-year"></span> TravelBuddy | Powered by Vertex AI</p>
+        </div>
+    </footer>
 
-        <footer>
-            <p>© 2025 TravelBuddy | Powered by Vertex AI</p>
-        </footer>
-    </div>
-
-    <script src="/static/scripts.js"></script>
+    <script src="/static/script.js"></script>
 </body>
 </html>
 
