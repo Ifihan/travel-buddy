@@ -47,8 +47,6 @@ def chat():
             file = request.files[file_key]
             if file.filename == '' or not file.content_type.startswith('image/'):
                 continue
-
-            print("Received files:", list(request.files.keys()))
             
             # Convert to Part
             image_bytes = file.read()
