@@ -128,6 +128,8 @@ main {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   white-space: pre-line;
   line-height: 1.6;
+  overflow-wrap: anywhere;
+  max-width: 90%;
 }
 
 .message.bot .message-content {
@@ -402,4 +404,148 @@ footer {
   #user-input {
     padding: 10px 12px;
   }
+}
+
+/* Add to chat.css */
+/* Camera Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: var(--background);
+  padding: 20px;
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 600px;
+}
+
+.camera-interface {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: #000;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+#camera-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Preview Container */
+.preview-container {
+  position: relative;
+  padding: 10px;
+  background: var(--background-alt);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.preview-container.hidden {
+  display: none;
+}
+
+.preview-items {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.preview-item {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.delete-preview {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+#image-prompt {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  margin-top: 8px;
+}
+
+/* Add image preview styling */
+.message.user .message-content img {
+  max-width: min(100%, 300px);
+  height: auto;
+  border-radius: 8px;
+  margin-top: 8px;
+  border: 2px solid var(--primary-light);
+}
+
+.message-image {
+  max-width: 300px;
+  border-radius: 12px;
+  margin: 8px 0;
+  border: 2px solid var(--primary-light);
+  overflow: hidden;
+}
+
+.message-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.separated-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.media-container {
+  background: var(--background-alt);
+  border-radius: var(--radius);
+  padding: 8px;
+  margin-top: 8px;
 }

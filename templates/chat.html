@@ -29,6 +29,28 @@
                     </div>
                 </div>
 
+                <!-- Camera Capture Modal -->
+                <div id="camera-modal" class="modal hidden">
+                    <div class="modal-content">
+                        <div class="camera-interface">
+                            <video id="camera-preview" autoplay playsinline></video>
+                            <canvas id="camera-canvas" hidden></canvas>
+                        </div>
+                        <div class="modal-actions">
+                            <button id="capture-button" class="btn-primary">Capture</button>
+                            <button id="close-camera" class="btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Preview Section -->
+                <div id="preview-container" class="preview-container hidden">
+                    <div class="preview-items" id="preview-items"></div>
+                    <input type="text" id="image-prompt" 
+                           placeholder="Describe your image (e.g. 'This is a beach in Thailand')" 
+                           autocomplete="off">
+                </div>
+
                 <button id="scroll-to-bottom" class="scroll-to-bottom-btn hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
                         <polyline points="6 9 12 15 18 9"></polyline>
@@ -39,22 +61,16 @@
                     <div class="input-container-group">
                         <div class="chat-input-container">
                             <div class="input-icons">
-                                <button id="camera-button" class="icon-button" aria-label="Take photo">
+                                <!-- Camera Button -->
+                                <button id="camera-button" class="icon-button" aria-label="Take photo" type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                         <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
                                         <circle cx="12" cy="13" r="3"></circle>
                                     </svg>
                                 </button>
 
-                                <button id="audio-button" class="icon-button" aria-label="Record audio">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-                                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                                        <line x1="12" x2="12" y1="19" y2="22"></line>
-                                    </svg>
-                                </button>
-
-                                <button id="upload-button" class="icon-button" aria-label="Upload image">
+                                <!-- Image Upload Button -->
+                                <button id="upload-button" class="icon-button" aria-label="Upload image" type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                         <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
                                         <circle cx="9" cy="9" r="2"></circle>
@@ -63,10 +79,14 @@
                                 </button>
                             </div>
 
-                            <input type="text" id="user-input" placeholder="Ask about a destination..." autocomplete="off">
+                            <!-- Main Text Input -->
+                            <input type="text" id="user-input" 
+                                   placeholder="Ask about a destination or upload images..." 
+                                   autocomplete="off">
                         </div>
                         
-                        <button id="send-button" aria-label="Send message">
+                        <!-- Send Button -->
+                        <button id="send-button" aria-label="Send message" type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
                                 <path d="m22 2-7 20-4-9-9-4Z"></path>
                                 <path d="M22 2 11 13"></path>
@@ -74,13 +94,14 @@
                         </button>
                     </div>
 
+                    <!-- Hidden File Inputs -->
                     <input type="file" id="image-upload" accept="image/*" hidden>
                     <input type="file" id="camera-input" accept="image/*" capture="environment" hidden>
-                    <input type="file" id="audio-input" accept="audio/*" hidden>
                 </div>
             </div>
         </main>
 
+        <!-- Suggested Questions -->
         <div class="suggestions">
             <p>Try asking:</p>
             <div class="suggestion-chips">

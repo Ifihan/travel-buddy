@@ -37,22 +37,46 @@ def clean_ai_response(text):
 @app.route("/api/chat", methods=["POST"])
 def chat():
     try:
-        data = request.json
-        user_message = data.get("message", "")
+        # Get text inputs
+        user_message = request.form.get("message", "")
+        prompt = request.form.get("prompt", "")
+        
+        # Process images
+        image_parts = []
+        for file_key in request.files:
+            file = request.files[file_key]
+            if file.filename == '' or not file.content_type.startswith('image/'):
+                continue
 
-        if not user_message:
-            return jsonify({"error": "No message provided"}), 400
+            print("Received files:", list(request.files.keys()))
+            
+            # Convert to Part
+            image_bytes = file.read()
+            image_part = types.Part.from_bytes(
+                data=image_bytes,
+                mime_type=file.mimetype
+            )
+            image_parts.append(image_part)
+            file.close()  # Important to close file handles
+
+        # Build contents
+        contents = []
+        if user_message:
+            contents.append(user_message)
+        if prompt:
+            contents.append(prompt)
+        contents.extend(image_parts)
 
         response = client.models.generate_content(
             model=os.getenv("GEN_AI_MODEL_NAME"),
-            contents=user_message,
+            contents=contents,
             config=types.GenerateContentConfig(
-                system_instruction="You are TravelBuddy, an AI that only answers travel-related questions. If the question is not about travel, politely decline to answer.",
-                response_mime_type="text/plain"),
+                system_instruction="You are TravelBuddy...",
+                response_mime_type="text/plain"
+            )
         )
 
-        ai_response = clean_ai_response(response.text) if response.text else "Sorry, I couldn't process that."
-
+        ai_response = clean_ai_response(response.text) if response.text else "Sorry..."
         return jsonify({"response": ai_response})
 
     except Exception as e:
