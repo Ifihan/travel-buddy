@@ -69,12 +69,12 @@ def chat():
             model=os.getenv("GEN_AI_MODEL_NAME"),
             contents=contents,
             config=types.GenerateContentConfig(
-                system_instruction="You are TravelBuddy...",
+                system_instruction="You are TravelBuddy, an AI that only answers travel-related questions. If the question is not about travel, politely decline to answer.",
                 response_mime_type="text/plain"
             )
         )
 
-        ai_response = clean_ai_response(response.text) if response.text else "Sorry..."
+        ai_response = clean_ai_response(response.text) if response.text else "Sorry, I couldn't process that."
         return jsonify({"response": ai_response})
 
     except Exception as e:
