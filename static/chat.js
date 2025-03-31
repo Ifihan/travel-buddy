@@ -20,11 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const imagePrompt = document.getElementById("image-prompt");
 
     // Audio recording elements
-    const audioModal = document.getElementById("audio-modal");
-    const waveContainer = document.getElementById("wave-container");
-    const recordingTime = document.getElementById("recording-time");
-    const stopRecordingButton = document.getElementById("stop-recording");
-    const saveRecordingButton = document.getElementById("save-recording");
+    const inputWaveform = document.getElementById("input-waveform");
 
     let mediaStream = null;
     let currentFiles = [];
@@ -33,27 +29,26 @@ document.addEventListener("DOMContentLoaded", () => {
     let audioRecorder = null;
     let audioChunks = [];
     let recordingStartTime = 0;
-    let recordingTimer = null;
-    let audioBlob = null;
     let isRecording = false;
     let audioContext = null;
     let audioAnalyser = null;
     let waveformBars = [];
+    let animationFrame = null;
 
     // Initialize footer year
     document.getElementById("current-year").textContent = new Date().getFullYear();
 
-    // Create waveform bars for audio visualization
-    function createWaveform() {
-        waveContainer.innerHTML = '';
+    // Create waveform bars for audio visualization in the input field
+    function createInputWaveform() {
+        inputWaveform.innerHTML = '';
         waveformBars = [];
-        // Create 20 bars for the waveform
-        for (let i = 0; i < 20; i++) {
+        // Create 15 bars for the waveform
+        for (let i = 0; i < 15; i++) {
             const bar = document.createElement("div");
-            bar.className = "wave-bar";
-            // Random initial height between 10px and 60px
-            bar.style.height = Math.floor(Math.random() * 50 + 10) + "px";
-            waveContainer.appendChild(bar);
+            bar.className = "waveform-bar";
+            // Random animation delay
+            bar.style.animationDelay = `${Math.random() * 0.5}s`;
+            inputWaveform.appendChild(bar);
             waveformBars.push(bar);
         }
     }
@@ -64,27 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
         
         waveformBars.forEach(bar => {
             // Get a random value influenced by the audio level
-            const randomHeight = Math.floor(audioLevel * 100) + Math.floor(Math.random() * 20);
-            // Clamp the height between 5px and 80px
-            const height = Math.max(5, Math.min(80, randomHeight));
+            const randomHeight = Math.floor(audioLevel * 20) + Math.floor(Math.random() * 10);
+            // Clamp the height between 5px and 25px
+            const height = Math.max(5, Math.min(25, randomHeight));
             bar.style.height = height + "px";
         });
-    }
-
-    // Format recording time (mm:ss)
-    function formatTime(ms) {
-        const seconds = Math.floor(ms / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-    }
-
-    // Update recording timer
-    function updateRecordingTime() {
-        if (!recordingStartTime) return;
-        
-        const elapsedTime = Date.now() - recordingStartTime;
-        recordingTime.textContent = formatTime(elapsedTime);
     }
 
     // Start audio recording
@@ -111,7 +90,24 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             
             audioRecorder.onstop = () => {
-                audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                transcribeAudio(audioBlob);
+                
+                // Clean up recording resources
+                if (audioContext) {
+                    audioContext.close().catch(console.error);
+                    audioContext = null;
+                    audioAnalyser = null;
+                }
+                
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+                
+                if (animationFrame) {
+                    cancelAnimationFrame(animationFrame);
+                    animationFrame = null;
+                }
             };
             
             // Start recording
@@ -121,14 +117,22 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Show recording state
             microphoneButton.classList.add("recording");
-            audioModal.classList.remove("hidden");
+            sendButton.classList.add("stop-recording");
             
-            // Create and start visualization
-            createWaveform();
-            recordingTimer = setInterval(updateRecordingTime, 1000);
+            // Change send button icon to stop icon
+            sendButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                    <rect x="6" y="6" width="12" height="12"></rect>
+                </svg>
+            `;
+            
+            // Hide input and show waveform
+            userInput.style.opacity = "0";
+            createInputWaveform();
+            inputWaveform.classList.remove("hidden");
             
             // Start updating the waveform
-            requestAnimationFrame(analyzeAudio);
+            analyzeAudio();
             
         } catch (error) {
             console.error("Error starting recording:", error);
@@ -153,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateWaveform(average);
         
         // Continue the animation loop
-        requestAnimationFrame(analyzeAudio);
+        animationFrame = requestAnimationFrame(analyzeAudio);
     }
     
     // Stop recording
@@ -163,84 +167,60 @@ document.addEventListener("DOMContentLoaded", () => {
         audioRecorder.stop();
         isRecording = false;
         
-        // Clean up
-        clearInterval(recordingTimer);
-        recordingTimer = null;
-        recordingStartTime = 0;
-        
         // Update UI
         microphoneButton.classList.remove("recording");
+        sendButton.classList.remove("stop-recording");
+        
+        // Change send button icon back to send icon
+        sendButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                <path d="m22 2-7 20-4-9-9-4Z"></path>
+                <path d="M22 2 11 13"></path>
+            </svg>
+        `;
+        
+        // Hide waveform and show input
+        inputWaveform.classList.add("hidden");
+        userInput.style.opacity = "1";
     }
     
-    // Transcribe audio (placeholder - would use a real service in production)
     async function transcribeAudio(blob) {
-        // This is a placeholder for actual transcription
-        // In a real app, you'd send the audio to a server or API
-        // For now, we'll simulate a simple transcription
-
-        // Create a loading message
         userInput.value = "Transcribing...";
         userInput.disabled = true;
-        
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Sample simulated response
-        // In production, replace with actual API call 
-        const sampleResponses = [
-            "I'd like to know about the best beaches in Thailand.",
-            "What are some budget-friendly hotels in Paris?",
-            "Tell me about the local cuisine in Italy.",
-            "What's the best time to visit Tokyo?",
-            "I need recommendations for a family trip to Orlando."
-        ];
-        
-        const transcribedText = sampleResponses[Math.floor(Math.random() * sampleResponses.length)];
-        
-        // Update UI with transcribed text
-        userInput.value = transcribedText;
-        userInput.disabled = false;
-        userInput.focus();
-    }
-    
-    // Save recording and transcribe
-    function saveRecording() {
-        if (!audioBlob) return;
-        
-        // Close modal
-        audioModal.classList.add("hidden");
-        
-        // Transcribe audio
-        transcribeAudio(audioBlob);
-        
-        // Clean up recording resources
-        if (audioContext) {
-            audioContext.close().catch(console.error);
-            audioContext = null;
-            audioAnalyser = null;
-        }
-    }
-    
-    // Cancel recording
-    function cancelRecording() {
-        stopRecording();
-        audioModal.classList.add("hidden");
-        
-        // Clean up
-        audioBlob = null;
-        audioChunks = [];
-        
-        if (audioContext) {
-            audioContext.close().catch(console.error);
-            audioContext = null;
-            audioAnalyser = null;
+        try {
+            const formData = new FormData();
+            formData.append("audio", blob, "recording.webm");
+
+            const response = await fetch("/transcribe", {
+                method: "POST",
+                body: formData
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const transcribedText = data.text;
+
+            // Put transcribed text in input field instead of sending immediately
+            userInput.value = transcribedText;
+            userInput.disabled = false;
+            userInput.focus();
+            
+        } catch (error) {
+            console.error("Error transcribing audio:", error);
+            userInput.value = "";
+            userInput.disabled = false;
+            // Show error message in chat instead of in input field
+            addMessage("Sorry, something went wrong with the transcription.", false);
         }
     }
 
-    // Add message to chat
+    // Add message to chat - Fixed to properly handle user/bot message alignment
     function addMessage(text, isUser = false, files = []) {
         const messageDiv = document.createElement("div");
-        messageDiv.className = `message ${isUser ? "user" : "bot"}`;
+        messageDiv.className = isUser ? "message user" : "message bot";
         
         const messageContent = document.createElement("div");
         messageContent.className = "message-content";
@@ -297,36 +277,48 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Simulate bot response
-    async function getBotResponse(userMessage) {
-        // In a real app, this would call an API
-        // For now, we'll just simulate a response
+    // Fixed getBotResponse implementation to prevent duplicate messages
+    function getBotResponse(userText) {
+        // No longer adding user message here since it's already added in sendMessage
+        // This was causing the duplication
         
         showTypingIndicator();
-        
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        removeTypingIndicator();
-        
-        // Simple responses based on keywords
-        if (userMessage.toLowerCase().includes("paris")) {
-            return "Paris is beautiful in the spring! The best time to visit is April to June or September to October when the weather is pleasant and crowds are smaller.";
-        } else if (userMessage.toLowerCase().includes("tokyo")) {
-            return "Tokyo is fascinating any time of year! For cherry blossoms, visit in late March to early April. For autumn colors, go in November. Summer can be very hot and humid.";
-        } else if (userMessage.toLowerCase().includes("budget") || userMessage.toLowerCase().includes("cheap")) {
-            return "For budget travel, consider visiting during shoulder seasons, staying in hostels or vacation rentals, using public transportation, and eating where locals eat. Many cities also offer free walking tours!";
-        } else if (userMessage.toLowerCase().includes("food") || userMessage.toLowerCase().includes("cuisine") || userMessage.toLowerCase().includes("italy")) {
-            return "Italian cuisine varies by region! In the north, expect rich dishes with butter and cheese. Central Italy features simpler pasta dishes and the south offers seafood, olive oil, and tomato-based sauces. Don't miss trying local specialties wherever you go!";
-        } else if (userMessage.toLowerCase().includes("beach") || userMessage.toLowerCase().includes("thailand")) {
-            return "Thailand has some of the world's most beautiful beaches! The best time to visit is during the dry season from November to April. Popular beach destinations include Phuket, Koh Samui, and Krabi.";
-        } else {
-            return "That sounds like an interesting destination! When are you planning to travel? I can help with specific recommendations for attractions, accommodations, and local tips.";
-        }
+
+        const formData = new FormData();
+        formData.append("message", userText);
+
+        fetch("/api/chat", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            removeTypingIndicator();
+            // Display the bot response
+            addMessage(data.response, false);
+            scrollToBottom();
+        })
+        .catch(error => {
+            console.error("Error fetching bot response:", error);
+            removeTypingIndicator();
+            addMessage("Sorry, something went wrong.", false);
+            scrollToBottom();
+        });
     }
 
     // Handle sending a message
-    async function sendMessage() {
+    function sendMessage() {
+        // If recording, stop recording instead of sending
+        if (isRecording) {
+            stopRecording();
+            return;
+        }
+        
         const message = userInput.value.trim();
         const files = [...currentFiles];
         
@@ -343,8 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
         previewItems.innerHTML = "";
         
         // Get bot response
-        const response = await getBotResponse(message);
-        addMessage(response, false);
+        getBotResponse(message);
     }
 
     // Scroll to bottom of chat
@@ -482,16 +473,11 @@ document.addEventListener("DOMContentLoaded", () => {
     microphoneButton.addEventListener("click", () => {
         if (isRecording) {
             stopRecording();
-            audioModal.classList.remove("hidden");
         } else {
             startRecording();
         }
     });
-    
-    stopRecordingButton.addEventListener("click", cancelRecording);
-    
-    saveRecordingButton.addEventListener("click", saveRecording);
 
     // Initialize
-    createWaveform();
+    createInputWaveform();
 });

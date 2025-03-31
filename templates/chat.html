@@ -43,35 +43,6 @@
                     </div>
                 </div>
 
-                <!-- Audio Recording Modal -->
-                <div id="audio-modal" class="modal hidden">
-                    <div class="modal-content">
-                        <div class="audio-interface">
-                            <div class="audio-visualization">
-                                <div class="wave-container" id="wave-container">
-                                    <!-- Wave animation divs will be added by JS -->
-                                </div>
-                                <div class="recording-time" id="recording-time">0:00</div>
-                            </div>
-                        </div>
-                        <div class="modal-actions">
-                            <button id="stop-recording" class="btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 6 6 18"></path>
-                                    <path d="m6 6 12 12"></path>
-                                </svg>
-                                Cancel
-                            </button>
-                            <button id="save-recording" class="btn-secondary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 6 9 17l-5-5"></path>
-                                </svg>
-                                Use
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Image Preview Section -->
                 <div id="preview-container" class="preview-container hidden">
                     <div class="preview-items" id="preview-items"></div>
@@ -117,10 +88,13 @@
                                 </button>
                             </div>
 
-                            <!-- Main Text Input -->
-                            <input type="text" id="user-input" 
-                                   placeholder="Ask about a destination or upload images..." 
-                                   autocomplete="off">
+                            <!-- Main Text Input with Audio Visualization -->
+                            <div class="input-wrapper">
+                                <input type="text" id="user-input" 
+                                       placeholder="Ask about a destination or upload images..." 
+                                       autocomplete="off">
+                                <div id="input-waveform" class="input-waveform hidden"></div>
+                            </div>
                         </div>
                         
                         <!-- Send Button -->
@@ -151,7 +125,7 @@
         </div>
 
         <footer>
-            <p>© <span id="current-year"></span> TravelBuddy | Powered by Vertex AI</p>
+            <p>© <span id="current-year"></span> TravelBuddy | Powered by AI</p>
         </footer>
     </div>
 

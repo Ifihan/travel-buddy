@@ -115,10 +115,15 @@ main {
 .message {
   display: flex;
   margin-bottom: 12px;
+  max-width: 100%;
 }
 
 .message.user {
   justify-content: flex-end;
+}
+
+.message.bot {
+  justify-content: flex-start;
 }
 
 .message-content {
@@ -129,17 +134,18 @@ main {
   white-space: pre-line;
   line-height: 1.6;
   overflow-wrap: anywhere;
-  max-width: 90%;
 }
 
 .message.bot .message-content {
   background-color: white;
   border: 1px solid var(--border-color);
+  margin-right: auto;
 }
 
 .message.user .message-content {
   background-color: var(--primary-color);
   color: white;
+  margin-left: auto;
 }
 
 .message p {
@@ -181,18 +187,65 @@ main {
   align-items: center;
 }
 
+.input-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
 #user-input {
   flex: 1;
+  width: 100%;
   padding: 12px 16px;
   border: none;
   border-radius: var(--radius);
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s;
+  background-color: transparent;
 }
 
 #user-input:focus {
   border-color: var(--primary-color);
+}
+
+/* Input waveform for audio recording */
+.input-waveform {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 16px;
+  background-color: white;
+  border-radius: var(--radius);
+  z-index: 1;
+}
+
+.input-waveform.hidden {
+  display: none;
+}
+
+.waveform-bar {
+  width: 3px;
+  height: 15px;
+  background-color: var(--primary-color);
+  border-radius: 1px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    height: 5px;
+  }
+  50% {
+    height: 15px;
+  }
 }
 
 #send-button {
@@ -406,7 +459,6 @@ footer {
   }
 }
 
-/* Add to chat.css */
 /* Camera Modal Styles */
 .modal {
   position: fixed;
@@ -551,64 +603,56 @@ footer {
   margin-top: 8px;
 }
 
-/* Audio recording styles */
-.audio-interface {
-  position: relative;
-  width: 100%;
-  height: 200px;
-  background: var(--primary-light);
-  border-radius: var(--radius);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.audio-visualization {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-.wave-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  height: 100px;
-  width: 200px;
-}
-
-.wave-bar {
-  width: 5px;
-  background-color: var(--primary-color);
-  border-radius: 2px;
-  transition: height 0.15s ease;
-}
-
-.recording-time {
-  font-size: 18px;
-  font-weight: 600;
+/* Highlighting active microphone button when recording */
+.icon-button.recording {
   color: var(--primary-color);
+  background-color: var(--primary-light);
+  animation: pulse 2s infinite;
 }
 
+/* Send button transforms to stop button during recording */
+#send-button.stop-recording {
+  background-color: #ef4444;
+}
+
+#send-button.stop-recording:hover {
+  background-color: #dc2626;
+}
+
+/* Transcribing indicator */
+.transcribing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary-color);
+  font-size: 14px;
+}
+
+.transcribing-indicator .dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.transcribing-indicator .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.transcribing-indicator .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Button styles for modal */
 .btn-primary {
   background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: var(--radius);
-  padding: 10px 20px;
+  padding: 8px 16px;
   font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   transition: background-color 0.2s, transform 0.2s;
 }
 
@@ -617,53 +661,18 @@ footer {
   transform: translateY(-1px);
 }
 
-.btn-primary:active {
-  transform: translateY(1px);
-}
-
 .btn-secondary {
-  background-color: white;
-  color: var(--primary-color);
-  border: 1px solid var(--primary-color);
+  background-color: var(--background);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius);
-  padding: 10px 20px;
+  padding: 8px 16px;
   font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   transition: background-color 0.2s, transform 0.2s;
 }
 
 .btn-secondary:hover {
-  background-color: var(--primary-light);
+  background-color: var(--background-alt);
   transform: translateY(-1px);
-}
-
-.btn-secondary:active {
-  transform: translateY(1px);
-}
-
-/* Highlighting active microphone button when recording */
-.icon-button.recording {
-  color: var(--primary-color);
-  background-color: var(--primary-light);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
-  }
-  70% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
-  }
 }
